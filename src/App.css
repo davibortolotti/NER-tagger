@@ -28,3 +28,11 @@
 .white_taggy_text mark span {
   color: black;
 }
+
+mark span {
+  z-index: 1;
+}
+
+mark {
+  z-index: 10;
+}

@@ -1,6 +1,6 @@
-import React, { ReactDOM, Component } from "react";
-import Taggy from "react-taggy";
-import TaggerModal from "./TaggerModal";
+import React, { ReactDOM, Component, createRef } from "react";
+import Taggy from "../../react-taggy/src";
+import TaggerModal from "../TaggerModal/TaggerModal";
 import Container from "react-bootstrap/Container";
 
 export default class Tagger extends Component {
@@ -13,20 +13,14 @@ export default class Tagger extends Component {
     };
   }
 
-  checkIfTagAlreadyExists = (list, newElement) => {
-    return false;
+  taggerRef = createRef();
 
-    return list.some(
-      e => (e.start === newElement.start) & (e.end === newElement.end)
-    );
-  };
-
-  showModal = () => {
-    this.setState({ modal: true });
-  };
-
-  hideModal = () => {
-    this.setState({ modal: false });
+  toggleModal = () => {
+    this.setState(prevState => {
+      return {
+        modal: !prevState.modal
+      };
+    });
   };
 
   measureElement = element => {
@@ -38,38 +32,50 @@ export default class Tagger extends Component {
   };
 
   onSelect = e => {
-    var baseIndex = window.getSelection().baseOffset;
-    var lastIndex = window.getSelection().focusOffset;
-    var wordSize = lastIndex - baseIndex;
-    var elem = window.getSelection().baseNode.parentNode;
-    var offset = window.getSelection().baseOffset;
-    console.log(elem.nodeName);
+    var sel = window.getSelection();
+    var baseIndex = sel.baseOffset;
+    var lastIndex = sel.focusOffset;
 
-    if ((wordSize == 0) & (elem.nodeName !== "MARK")) {
-      this.hideModal();
-      return;
+    if (baseIndex > lastIndex) {
+      baseIndex = sel.focusOffset;
+      lastIndex = sel.baseOffset;
     }
-
     if (
-      ((elem.parentNode.nodeName == "MARK") & (elem.nodeName == "SPAN")) |
-      (elem.nodeName == "MARK")
+      sel
+        .getRangeAt(0)
+        .cloneContents()
+        .textContent.slice(-1) === " "
     ) {
+      lastIndex -= 1;
+    }
+    var wordSize = lastIndex - baseIndex;
+    var elem = sel.baseNode.parentNode;
+    var offset = baseIndex;
+
+    var closestMark = elem.closest("mark");
+    if (
+      ((wordSize === 0) & !closestMark) |
+      (sel.getRangeAt(0).startContainer !== sel.getRangeAt(0).endContainer)
+    ) {
+      return;
+    } else if (closestMark) {
       var siblingOffset = 0;
       siblingOffset = this.calculateSiblingsOffset(
-        e.target.parentNode,
+        closestMark.parentNode,
         siblingOffset
       );
-      if (!this.state.selectForDelete) {
+      if (!this.state.selectForChange) {
         this.setState(prevState => {
           return {
-            selectForDelete: prevState.selected.filter(
+            selectForChange: prevState.selected.filter(
               e => e.start === siblingOffset
             )[0]
           };
         });
       } else if (wordSize <= 0) {
-        this.hideModal();
-        this.setState({ selectForDelete: null, selection: null });
+        this.toggleModal();
+        this.setState({ selectForChange: null, selection: null });
+
         return;
       }
     }
@@ -79,7 +85,7 @@ export default class Tagger extends Component {
     var left = xPosition;
     var right = "none";
 
-    this.showModal();
+    this.toggleModal();
 
     this.setState({
       modalPosition: { top: yPosition, left: left, right: right }
@@ -88,14 +94,23 @@ export default class Tagger extends Component {
     offset = this.calculateSiblingsOffset(elem, offset);
     var start = offset;
     var end = offset + wordSize;
+
     this.setState({ selection: { start, end } });
   };
 
   calculateSiblingsOffset = (elem, offset) => {
+    if (elem.previousSibling) {
+      if (elem.parentNode.nodeName === "MARK") {
+        elem = elem.parentNode.parentNode;
+      }
+    }
+
     while ((elem = elem.previousSibling)) {
       offset += elem.textContent.length;
-      if (elem.children.length > 0 && elem.children[0].nodeName === "MARK") {
-        offset -= elem.children[0].children[0].textContent.length;
+      if (elem.children && elem.children.length > 0) {
+        if (elem.children[0].nodeName === "MARK") {
+          offset -= elem.children[0].children[0].textContent.length;
+        }
       }
     }
     return offset;
@@ -111,24 +126,37 @@ export default class Tagger extends Component {
     this.setState(prevState => ({
       selected: [...prevState.selected, newSelected].sort(this.sortTags)
     }));
-    this.hideModal();
   };
 
   deleteTag = () => {
-    console.log(this.state);
     var toDelete = {
-      start: this.state.selectForDelete.start,
-      end: this.state.selectForDelete.end
+      start: this.state.selectForChange.start,
+      end: this.state.selectForChange.end
     };
-    console.log(toDelete);
-
     this.setState(prevState => ({
       selected: prevState.selected.filter(
         e => (e.start !== toDelete.start) & (e.end !== toDelete.end)
       )
     }));
-    this.setState({ selectForDelete: null });
-    this.hideModal();
+    this.setState({ selectForChange: null });
+  };
+
+  changeTag = e => {
+    e.persist();
+    var toChange = {
+      start: this.state.selectForChange.start,
+      end: this.state.selectForChange.end,
+      type: e.target.value
+    };
+    this.setState(prevState => ({
+      selected: [
+        ...prevState.selected.filter(
+          s => (s.start !== toChange.start) & (s.end !== toChange.end)
+        ),
+        toChange
+      ].sort(this.sortTags)
+    }));
+    this.setState({ selectForChange: null });
   };
 
   sortTags = (a, b) => {
@@ -146,24 +174,26 @@ export default class Tagger extends Component {
 
     var modal = null;
     var deleteTag = null;
-    if (this.state.selectForDelete) {
+    var handler = this.setTag;
+    if (this.state.selectForChange) {
       deleteTag = this.deleteTag;
+      handler = this.changeTag;
     }
     if (this.state.modal === true) {
       modal = (
         <TaggerModal
           position={this.state.modalPosition}
-          handler={this.setTag}
+          handler={handler}
           deleteTag={deleteTag}
           ents={this.props.ents}
-          ref={r => (this.tagRef = r)}
-          hideModal={this.hideModal}
+          toggleModal={this.toggleModal}
+          width={this.taggerRef.current.offsetWidth}
         />
       );
     }
 
     return (
-      <Container fluid={true} className="white_taggy_text">
+      <Container ref={this.taggerRef} fluid={true} className="white_taggy_text">
         {modal}
         <div onMouseUp={this.onSelect}>
           <Taggy text={this.props.text} spans={spans} ents={this.props.ents} />

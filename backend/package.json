@@ -1,0 +1,15 @@
+{
+  "name": "tagger_backend",
+  "version": "1.0.0",
+  "description": "Aplicação backend para um NER tagger",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express-fileupload": "^1.1.6",
+    "mongodb": "^3.3.5"
+  }
+}

@@ -32,7 +32,6 @@ function ColorSelecter(props) {
       if (input) {
         props.addTag(input, pickedColor);
       }
-      // put the login here
     }
   };
 

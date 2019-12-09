@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./TagCreator.css";
 import Button from "react-bootstrap/Button";
-import ColorSelecter from "./ColorSelecter";
+import ColorSelecter from "../ColorSelecter/ColorSelecter";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 function TagCreator(props) {

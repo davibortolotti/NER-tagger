@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Tagger from "./components/Tagger/Tagger.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import TagCreator from "./components/TagCreator/TagCreator.js";
+import axios from "axios";
 
 function App() {
   const [ents, setEnts] = useState([
@@ -15,6 +16,15 @@ function App() {
       }
     }
   ]);
+
+  const [text, setText] = useState("teste");
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/").then(function(response) {
+      // handle success
+      setText(response.data);
+    });
+  });
 
   const createTagType = (newEnt, rgb) => {
     setEnts(prevState => {
@@ -40,10 +50,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className="content">
-          <Tagger
-            text={`Apple Inc. (NASDAQ: AAPL; NYSE: AAPL; anteriormente Apple Computer, Inc.) é uma empresa multinacional norte-americana que tem o objetivo de projetar e comercializar produtos eletrônicos de consumo, software de computador e computadores pessoais. Os produtos de hardware mais conhecidos da empresa incluem a linha de computadores Macintosh, iPod, iPhone, iPad, Apple TV e o Apple Watch. Os softwares incluem o sistema operacional macOS, o navegador de mídia iTunes, suíte de software multimídia e criatividade iLife, suíte de software de produtividade iWork, Aperture, um pacote de fotografia profissional, Final Cut Studio, uma suíte de vídeo profissional, produtos de software, Lógica Studio, um conjunto de ferramentas de produção musical, navegador Safari e o iOS, um sistema operacional móvel.`}
-            ents={ents}
-          />
+          <Tagger text={text} ents={ents} />
         </div>
         <TagCreator
           createTagType={createTagType}

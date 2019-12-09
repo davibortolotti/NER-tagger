@@ -74,7 +74,7 @@ export default class Tagger extends Component {
         });
       } else if (wordSize <= 0) {
         this.toggleModal();
-        this.setState({ selectForChange: null, selection: null });
+        // this.setState({ selectForChange: null, selection: null });
 
         return;
       }
@@ -187,7 +187,10 @@ export default class Tagger extends Component {
           deleteTag={deleteTag}
           ents={this.props.ents}
           toggleModal={this.toggleModal}
-          width={this.taggerRef.current.offsetWidth}
+          width={
+            this.taggerRef.current.offsetWidth -
+            parseInt(this.taggerRef.current.style.paddingRight)
+          }
         />
       );
     }

@@ -1,0 +1,85 @@
+.tagcreator {
+  width: 10%;
+  background-color: #3d4147;
+  height: 100vh;
+
+  flex-wrap: wrap;
+}
+
+:root {
+  --light: 80;
+  /* the threshold at which colors are considered "light." Range: integers from 0 to 100,
+recommended 50 - 70 */
+  --threshold: 50;
+}
+
+.tagcreator_content {
+  width: 100%;
+  height: fit-content;
+}
+
+.tagcreator_content_tag {
+  width: 80%;
+  height: fit-content;
+  margin: 10px auto;
+  border-radius: 10px;
+  border: solid 1px;
+  font-size: 20px;
+  padding: 10px 0;
+  word-wrap: break-word;
+  color: black;
+}
+
+.content {
+  width: 90%;
+  padding: 0 20vh;
+}
+
+.floating_box {
+  position: absolute;
+  right: 0;
+  width: 220px;
+}
+
+.name_picker {
+  width: 220px;
+  text-align: center;
+}
+
+.remove_button {
+  color: white;
+  position: relative;
+  right: 0px;
+  background: inherit;
+  border: none;
+}
+
+.remove_button:active {
+  color: red;
+  outline: none;
+}
+
+.remove_button:focus {
+  outline: none;
+}
+
+.remove_button_icon {
+  pointer-events: none;
+  outline: none;
+}
+
+.container {
+  display: flex;
+}
+
+.color_picker_modal {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 100vw;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}

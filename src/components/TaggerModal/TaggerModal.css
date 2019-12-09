@@ -13,6 +13,7 @@
   background-color: #282828;
   position: absolute;
   width: fit-content;
+  max-width: 400px;
   padding: 10px;
   border: solid #c96304 2px;
   border-radius: 10px;

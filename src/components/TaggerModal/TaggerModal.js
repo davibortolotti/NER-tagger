@@ -1,19 +1,21 @@
-import React, { useEffect, useRef, forwardRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
 
 import "./TaggerModal.css";
 
-const TaggerModal = (props, upperRef) => {
+const TaggerModal = props => {
   var modalRef = useRef();
   useEffect(() => {
+    console.log(props.width);
     if (
-      modalRef.current.offsetWidth + parseInt(modalRef.current.style.left, 10) >
+      modalRef.current.offsetWidth -
+        +parseInt(modalRef.current.style.left, 10) >
       props.width
     ) {
       modalRef.current.style.left = null;
       modalRef.current.style.right = 0;
     }
-  }, [props.innerWidth]);
+  }, [props.width]);
 
   {
     const buttons = props.ents.map(element => {
@@ -24,7 +26,7 @@ const TaggerModal = (props, upperRef) => {
         <Button
           className="tag_button"
           onClick={props.handler}
-          value={name}
+          value={name.toUpperCase()}
           style={{ backgroundColor }}
           key={name}
         >

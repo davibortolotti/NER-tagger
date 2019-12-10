@@ -6,11 +6,17 @@ import Container from "react-bootstrap/Container";
 export default class Tagger extends Component {
   constructor(props) {
     super(props);
+    console.log(props.spans);
     this.state = {
-      selected: [],
       modal: false,
       modalPosition: { top: null, left: null }
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.spans !== prevProps.spans) {
+      this.setState({ selected: this.props.spans });
+    }
   }
 
   taggerRef = createRef();
@@ -74,7 +80,6 @@ export default class Tagger extends Component {
         });
       } else if (wordSize <= 0) {
         this.toggleModal();
-        // this.setState({ selectForChange: null, selection: null });
 
         return;
       }
@@ -170,8 +175,7 @@ export default class Tagger extends Component {
   };
 
   render() {
-    const spans = this.state.selected;
-
+    console.log(this.state.selected);
     var modal = null;
     var deleteTag = null;
     var handler = this.setTag;
@@ -199,7 +203,11 @@ export default class Tagger extends Component {
       <Container ref={this.taggerRef} fluid={true} className="white_taggy_text">
         {modal}
         <div onMouseUp={this.onSelect}>
-          <Taggy text={this.props.text} spans={spans} ents={this.props.ents} />
+          <Taggy
+            text={this.props.text}
+            spans={this.state.selected}
+            ents={this.props.ents}
+          />
         </div>
       </Container>
     );

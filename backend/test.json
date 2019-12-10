@@ -1,5 +1,16 @@
 [
   {
-    "text": "teste teste muito teste"
+    "text": "teste teste muito teste israel"
+  },
+  {
+    "text": "israel é uma cara muito loucuraa",
+
+    "annotations": [
+      {
+        "start": 1,
+        "end": 5,
+        "type": "seila"
+      }
+    ]
   }
 ]

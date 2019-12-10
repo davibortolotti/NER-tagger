@@ -7,6 +7,7 @@ function ColorSelecter(props) {
     g: 123,
     b: 43
   });
+
   const style = {
     left: props.position.x - 220,
     top: props.position.y

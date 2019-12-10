@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import Tagger from "./components/Tagger/Tagger.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -17,14 +17,19 @@ function App() {
     }
   ]);
 
+  const [spans, setSpans] = useState([]);
+
   const [text, setText] = useState("teste");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/").then(function(response) {
-      // handle success
-      setText(response.data);
-    });
-  });
+    axios
+      .get("http://localhost:3001/project/1/texts/unannotated")
+      .then(function(response) {
+        setText(response.data[0].text);
+        console.log(response.data[0]);
+        setSpans(response.data[0].annotations);
+      });
+  }, []);
 
   const createTagType = (newEnt, rgb) => {
     setEnts(prevState => {
@@ -50,7 +55,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className="content">
-          <Tagger text={text} ents={ents} />
+          <Tagger text={text} ents={ents} spans={spans} />
         </div>
         <TagCreator
           createTagType={createTagType}

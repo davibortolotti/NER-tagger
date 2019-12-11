@@ -1,6 +1,6 @@
-# PANGEA
+# NER tagger
 
-Este é o repositório oficial da ferramentade criação de datasets NER através de tagging em texto.. Descritas aqui estão as informações para desenvolvimento e _build_ da aplicação web do protótipo do projeto, estruturas de pastas, informações, etc.
+Este é o repositório oficial da ferramenta de criação de datasets NER através de tagging em texto.. Descritas aqui estão as informações para desenvolvimento e _build_ da aplicação web do protótipo do projeto, estruturas de pastas, informações, etc.
 
 ## 1. Arquitetura
 

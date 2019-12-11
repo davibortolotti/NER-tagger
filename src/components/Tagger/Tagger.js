@@ -9,12 +9,13 @@ export default class Tagger extends Component {
     console.log(props.spans);
     this.state = {
       modal: false,
-      modalPosition: { top: null, left: null }
+      modalPosition: { top: null, left: null },
+      selected: []
     };
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.spans !== prevProps.spans) {
+    if (this.props.spans !== prevProps.spans && this.props.spans.length > 0) {
       this.setState({ selected: this.props.spans });
     }
   }
@@ -175,7 +176,6 @@ export default class Tagger extends Component {
   };
 
   render() {
-    console.log(this.state.selected);
     var modal = null;
     var deleteTag = null;
     var handler = this.setTag;

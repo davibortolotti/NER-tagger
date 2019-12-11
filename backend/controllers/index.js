@@ -9,6 +9,8 @@ router.use(function(req, res, next) {
   );
   next();
 });
+
+router.use(express.json());
 router.use("/project/:project/texts", require("./textsController"));
 
 module.exports = router;

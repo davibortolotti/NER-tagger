@@ -19,16 +19,23 @@ function App() {
 
   const [spans, setSpans] = useState([]);
 
-  const [text, setText] = useState("teste");
-
-  useEffect(() => {
+  const [text, setText] = useState(null);
+  const refreshText = () => {
     axios
-      .get("http://localhost:3001/project/1/texts/unannotated")
+      .get("http://127.0.0.1:3001/project/1/texts/randomUnannotated")
       .then(function(response) {
         setText(response.data[0].text);
-        console.log(response.data[0]);
-        setSpans(response.data[0].annotations);
+
+        if (response.data[0].annotations) {
+          setSpans(response.data[0].annotations);
+        } else {
+          setSpans([]);
+        }
       });
+  };
+
+  useEffect(() => {
+    refreshText();
   }, []);
 
   const createTagType = (newEnt, rgb) => {
@@ -57,6 +64,7 @@ function App() {
         <div className="content">
           <Tagger text={text} ents={ents} spans={spans} />
         </div>
+        <button onClick={refreshText}>next</button>
         <TagCreator
           createTagType={createTagType}
           removeTagType={removeTagType}

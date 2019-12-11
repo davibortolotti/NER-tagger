@@ -13,6 +13,12 @@ router.get("/unannotated", function(req, res) {
     .then(texts => res.send(texts));
 });
 
+router.get("/randomUnannotated", function(req, res) {
+  textStore
+    .getRandomUnannotatedText(req.params.project)
+    .then(text => res.send(text));
+});
+
 router.post("/fromFile", function(req, res) {
   s = req.files.file.data.toString();
   try {
@@ -34,6 +40,14 @@ router.post("/fromFile", function(req, res) {
       .status(400)
       .send({ message: "json format is not valid. Please check:" });
   }
+});
+
+router.put("/:id", function(req, res) {
+  newAnnotation = req.body;
+  console.log(newAnnotation);
+  textStore.updateText(req.params.id, newAnnotation).then(text => {
+    res.send({ updated: text });
+  });
 });
 
 module.exports = router;

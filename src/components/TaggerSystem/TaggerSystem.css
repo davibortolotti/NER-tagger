@@ -1,0 +1,62 @@
+.tagger-system {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+  justify-content: flex-end;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.white_taggy_text mark {
+  color: white;
+}
+
+.white_taggy_text mark span {
+  color: black;
+}
+
+mark span {
+  z-index: 1;
+}
+
+mark {
+  z-index: 10;
+}
+
+.content {
+  width: 90%;
+  padding: 2vh 5vh 10vh 5vh;
+  margin: 20vh 15vh;
+  border: solid 1px white;
+  border-radius: 10px;
+  height: fit-content;
+}
+
+.buttons {
+  position: relative;
+  margin-bottom: 20px;
+  display: block;
+  right: 0;
+  text-align: right;
+}
+
+.arrow_button {
+  border: none;
+  background-color: inherit;
+  outline: none;
+}
+
+.arrow_button:focus {
+  outline: none;
+}
+
+.arrow_button img {
+  height: 20px;
+}
+
+.arrow_button img:hover {
+  filter: invert(0.29) sepia(1) saturate(6.3) hue-rotate(0deg) brightness(1);
+}

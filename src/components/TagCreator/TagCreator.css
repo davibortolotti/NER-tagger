@@ -1,5 +1,6 @@
 .tagcreator {
   width: 10%;
+  min-width: 200px;
   background-color: #3d4147;
   height: 100vh;
 
@@ -14,36 +15,57 @@ recommended 50 - 70 */
 }
 
 .tagcreator_content {
+  padding: 2vh 0;
+  font-family: "Source Code Pro", monospace;
   width: 100%;
   height: fit-content;
 }
 
 .tagcreator_content_tag {
-  width: 80%;
+  font-family: "Barlow Semi Condensed", monospace;
+  font-weight: bold;
+  min-width: 60%;
+  padding: 0 8px;
   height: fit-content;
   margin: 10px auto;
-  border-radius: 10px;
+  border-radius: 6px;
   border: solid 1px;
   font-size: 20px;
-  padding: 10px 0;
+  padding: 4px 0;
   word-wrap: break-word;
   color: black;
-}
-
-.content {
-  width: 90%;
-  padding: 0 20vh;
 }
 
 .floating_box {
   position: absolute;
   right: 0;
-  width: 220px;
+  width: 260px;
+  background-color: black;
+  border-radius: 20px;
 }
 
 .name_picker {
-  width: 220px;
+  width: 240px;
   text-align: center;
+  margin-top: 20px;
+}
+
+.color_picker {
+  margin: auto;
+  padding: 20px 0;
+  opacity: 80%;
+}
+
+.add_button {
+  width: 70%;
+  height: fit-content;
+  margin: 10px auto;
+  border: none;
+  font-size: 20px;
+  padding: 10px 0;
+  word-wrap: break-word;
+  color: white;
+  background-color: inherit;
 }
 
 .remove_button {

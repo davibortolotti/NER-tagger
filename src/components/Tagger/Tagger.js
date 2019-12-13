@@ -6,20 +6,15 @@ import Container from "react-bootstrap/Container";
 export default class Tagger extends Component {
   constructor(props) {
     super(props);
-    console.log(props.spans);
     this.state = {
       modal: false,
-      modalPosition: { top: null, left: null },
-      selected: []
+      modalPosition: { top: null, left: null }
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.spans !== prevProps.spans && this.props.spans.length > 0) {
-      this.setState({ selected: this.props.spans });
-    }
+  componentWillReceiveProps() {
+    console.log(this.props);
   }
-
   taggerRef = createRef();
 
   toggleModal = () => {
@@ -71,13 +66,12 @@ export default class Tagger extends Component {
         closestMark.parentNode,
         siblingOffset
       );
+
       if (!this.state.selectForChange) {
-        this.setState(prevState => {
-          return {
-            selectForChange: prevState.selected.filter(
-              e => e.start === siblingOffset
-            )[0]
-          };
+        this.setState({
+          selectForChange: this.props.spans.filter(
+            e => e.start === siblingOffset
+          )[0]
         });
       } else if (wordSize <= 0) {
         this.toggleModal();
@@ -100,7 +94,6 @@ export default class Tagger extends Component {
     offset = this.calculateSiblingsOffset(elem, offset);
     var start = offset;
     var end = offset + wordSize;
-
     this.setState({ selection: { start, end } });
   };
 
@@ -129,9 +122,9 @@ export default class Tagger extends Component {
       type: e.target.value
     };
 
-    this.setState(prevState => ({
-      selected: [...prevState.selected, newSelected].sort(this.sortTags)
-    }));
+    this.props.setSpans(prevState => {
+      return [...prevState, newSelected].sort(this.sortTags);
+    });
   };
 
   deleteTag = () => {
@@ -139,11 +132,11 @@ export default class Tagger extends Component {
       start: this.state.selectForChange.start,
       end: this.state.selectForChange.end
     };
-    this.setState(prevState => ({
-      selected: prevState.selected.filter(
+    this.props.setSpans(prevState => {
+      return prevState.filter(
         e => (e.start !== toDelete.start) & (e.end !== toDelete.end)
-      )
-    }));
+      );
+    });
     this.setState({ selectForChange: null });
   };
 
@@ -154,14 +147,14 @@ export default class Tagger extends Component {
       end: this.state.selectForChange.end,
       type: e.target.value
     };
-    this.setState(prevState => ({
-      selected: [
+    this.props.setState(prevState => {
+      [
         ...prevState.selected.filter(
           s => (s.start !== toChange.start) & (s.end !== toChange.end)
         ),
         toChange
-      ].sort(this.sortTags)
-    }));
+      ].sort(this.sortTags);
+    });
     this.setState({ selectForChange: null });
   };
 
@@ -205,7 +198,7 @@ export default class Tagger extends Component {
         <div onMouseUp={this.onSelect}>
           <Taggy
             text={this.props.text}
-            spans={this.state.selected}
+            spans={this.props.spans}
             ents={this.props.ents}
           />
         </div>

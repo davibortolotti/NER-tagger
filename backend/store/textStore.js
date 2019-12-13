@@ -6,7 +6,7 @@ MongoClient.connect("mongodb://192.168.99.100:27017/", function(err, database) {
     throw err;
   }
   console.log("Connected to mongodb");
-  db = database.db("texts");
+  db = database.db("tagger");
 });
 
 const insertTexts = texts => {
@@ -45,20 +45,66 @@ const getRandomUnannotatedText = thisProject => {
   return text;
 };
 
+const getTextFromId = id => {
+  text = db.collection("texts").findOne({
+    _id: new ObjectID(id)
+  });
+  return text;
+};
+
+const getAllProjectTextsIds = projectId => {
+  text = db.collection("texts").distinct("_id", { project: projectId });
+  return text;
+};
+
+const getAllProjectTexts = projectId => {
+  text = db
+    .collection("texts")
+    .find({})
+    .project({ _id: 0, project: 0 })
+    .toArray();
+  return text;
+};
+
 const updateText = (id, newText) => {
-  // newText.id = id;
+  newText._id = new ObjectID(id);
   text = db.collection("texts").replaceOne(
     {
-      _id: new ObjectID(id)
+      _id: newText._id
     },
     newText
   );
   return text;
 };
 
+const deleteFromType = async (projectId, typeId) => {
+  console.log(typeId);
+  db.collection("types")
+    .findOne({
+      _id: new ObjectID(typeId)
+    })
+    .then(type => {
+      console.log(type.type);
+      db.collection("texts").update(
+        {
+          project: projectId
+        },
+        { $pull: { annotations: { type: type.type.toUpperCase() } } },
+        { multi: true },
+        (err, doc) => {
+          console.log(err);
+        }
+      );
+    });
+};
+
 module.exports = {
-  insertTexts: insertTexts,
-  getUnannotatedTexts: getUnannotatedTexts,
-  getRandomUnannotatedText: getRandomUnannotatedText,
-  updateText: updateText
+  deleteFromType,
+  insertTexts,
+  updateText,
+  getAllProjectTexts,
+  getAllProjectTextsIds,
+  getRandomUnannotatedText,
+  getTextFromId,
+  getUnannotatedTexts
 };

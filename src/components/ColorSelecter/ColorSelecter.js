@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { SketchPicker } from "react-color";
+import { CirclePicker } from "react-color";
 
 function ColorSelecter(props) {
   const [pickedColor, setPickedColor] = useState({
@@ -48,7 +48,12 @@ function ColorSelecter(props) {
     >
       <div className="floating_box" style={style} tabIndex={1} ref={modalRef}>
         <input className="name_picker" ref={inputRef} onKeyDown={keyPress} />
-        <SketchPicker onChangeComplete={pickColor} color={pickedColor} />
+        <CirclePicker
+          width="260px"
+          onChangeComplete={pickColor}
+          color={pickedColor}
+          className="color_picker"
+        />
       </div>
     </div>
   );

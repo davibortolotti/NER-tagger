@@ -6,7 +6,6 @@ import "./TaggerModal.css";
 const TaggerModal = props => {
   var modalRef = useRef();
   useEffect(() => {
-    console.log(props.width);
     if (
       modalRef.current.offsetWidth -
         +parseInt(modalRef.current.style.left, 10) >

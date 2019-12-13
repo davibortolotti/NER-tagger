@@ -1,9 +1,9 @@
 var express = require("express"),
   router = express.Router({ mergeParams: true }),
   fileUpload = require("express-fileupload"),
-  fs = require("fs"),
   validate = require("../schemas/textSchema"),
   textStore = require("../store/textStore");
+textService = require("../services/textService");
 
 router.use(fileUpload());
 
@@ -17,6 +17,35 @@ router.get("/randomUnannotated", function(req, res) {
   textStore
     .getRandomUnannotatedText(req.params.project)
     .then(text => res.send(text));
+});
+
+router.get("/", function(req, res) {
+  textStore.getAllProjectTextsIds(parseInt(req.params.project)).then(texts => {
+    res.send(texts);
+  });
+});
+
+router.get("/exports", (req, res) => {
+  res.type("txt");
+  textService
+    .exportProjectTextsAsJsonDataturks(parseInt(req.params.project))
+    .then(texts => {
+      console.log(texts);
+      res.send(texts);
+    });
+});
+
+router.get("/:id", function(req, res) {
+  textStore.getTextFromId(req.params.id).then(text => {
+    res.send(text);
+  });
+});
+
+router.put("/:id", function(req, res) {
+  newAnnotation = req.body;
+  textStore.updateText(req.params.id, newAnnotation).then(text => {
+    res.send({ updated: text });
+  });
 });
 
 router.post("/fromFile", function(req, res) {
@@ -40,14 +69,6 @@ router.post("/fromFile", function(req, res) {
       .status(400)
       .send({ message: "json format is not valid. Please check:" });
   }
-});
-
-router.put("/:id", function(req, res) {
-  newAnnotation = req.body;
-  console.log(newAnnotation);
-  textStore.updateText(req.params.id, newAnnotation).then(text => {
-    res.send({ updated: text });
-  });
 });
 
 module.exports = router;

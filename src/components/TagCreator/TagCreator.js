@@ -22,20 +22,20 @@ function TagCreator(props) {
   };
 
   const tagDivs = props.ents.map(e => {
-    var o = Math.round(
-      (parseInt(e.color.r) * 299 +
-        parseInt(e.color.g) * 587 +
-        parseInt(e.color.b) * 114) /
-        1000
-    );
-    var fore = o > 125 ? "black" : "white";
+    // var o = Math.round(
+    //   (parseInt(e.color.r) * 299 +
+    //     parseInt(e.color.g) * 587 +
+    //     parseInt(e.color.b) * 114) /
+    //     1000
+    // );
+    // var fore = o > 125 ? "black" : "white";
     const divStyle = {
-      backgroundColor: `rgb(${e.color.r}, ${e.color.g}, ${e.color.b})`,
-      color: fore
+      backgroundColor: `rgb(${e.color.r}, ${e.color.g}, ${e.color.b})`
+      // color: fore
     };
 
     return (
-      <div className="container">
+      <div className="container" key={e.type}>
         <div className="tagcreator_content_tag" style={divStyle} key={e.type}>
           {e.type.toUpperCase()}
         </div>
@@ -66,7 +66,9 @@ function TagCreator(props) {
     <aside className="tagcreator">
       <h2 className="tagcreator_content">TAGS</h2>
       {selector}
-      <Button onClick={openColorPicker}>+ Criar Tag</Button>
+      <Button className="add_button" onClick={openColorPicker}>
+        + Criar Tag
+      </Button>
       {thisPicker}
       {tagDivs}
     </aside>

@@ -1,7 +1,12 @@
+.header {
+  height: fit-content;
+  position: relative;
+  text-align: right;
+}
+
 .tagger-system {
   text-align: center;
   background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: row;
   align-items: top;
@@ -27,9 +32,8 @@ mark {
 }
 
 .content {
-  width: 90%;
   padding: 2vh 5vh 10vh 5vh;
-  margin: 20vh 15vh;
+  margin: 20vh 15vh 0 15vh;
   border: solid 1px white;
   border-radius: 10px;
   height: fit-content;

@@ -124,9 +124,16 @@ function TaggerSystem() {
 
   return (
     <div className="tagger-system">
-      <div className="content">
-        <div className="buttons">{buttons}</div>
-        <Tagger text={text} ents={ents} spans={spans} setSpans={setSpans} />
+      <div>
+        {/* <header className="header">
+          <button>Add content</button>
+        </header> */}
+
+        <div className="content">
+          <div className="buttons">{buttons}</div>
+
+          <Tagger text={text} ents={ents} spans={spans} setSpans={setSpans} />
+        </div>
       </div>
 
       <TagCreator

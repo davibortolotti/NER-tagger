@@ -1,7 +1,7 @@
 MongoClient = require("mongodb").MongoClient;
 ObjectID = require("mongodb").ObjectId;
 
-MongoClient.connect("mongodb://192.168.99.100:27017/", function(err, database) {
+MongoClient.connect("mongodb://192.168.99.102:27017/", function(err, database) {
   if (err) {
     throw err;
   }
@@ -33,7 +33,6 @@ const getRandomUnannotatedText = thisProject => {
       {
         $match: {
           project: parseInt(thisProject)
-          // annotations: { $exists: true }
         }
       },
       {
@@ -84,7 +83,6 @@ const deleteFromType = async (projectId, typeId) => {
       _id: new ObjectID(typeId)
     })
     .then(type => {
-      console.log(type.type);
       db.collection("texts").update(
         {
           project: projectId
